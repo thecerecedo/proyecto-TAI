@@ -25,7 +25,7 @@ public class Equipos_de_propietarios extends JFrame{
     private JButton consultarbt;
     private JList lista;
     private JButton quitarbt;
-    private JTextField textField12;
+    private JTextField idt;
     private JLabel e;
 
 
@@ -50,6 +50,29 @@ public class Equipos_de_propietarios extends JFrame{
                 }
             }
         });
+        quitarbt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    eliminar();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+    }
+    public void eliminar() throws SQLException {
+        conectar();
+        ps = con.prepareStatement("DELETE FROM equipo_propietarios WHERE equipo_propid=?" );
+        ps.setInt(1, Integer.parseInt(idt.getText()));
+        System.out.println("Entró");
+        if(ps.executeUpdate() > 0) {
+            System.out.println("Eliminado");
+        }
+        else
+            System.out.println("no eliminado");
+
+
     }
     public void listar() throws SQLException {
         conectar();
@@ -63,22 +86,22 @@ public class Equipos_de_propietarios extends JFrame{
     }
     public void  insertar() throws SQLException {
         conectar();
-        ps = con.prepareStatement("INSERT INTO equipo_propietarios VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-        ps.setInt(1, Integer.parseInt(IDt.getText()));
-        ps.setInt(2, Integer.parseInt(velast.getText()));
-        ps.setInt(3, Integer.parseInt(anclast.getText()));
-        ps.setInt(4, Integer.parseInt(cuerdast.getText()));
-        ps.setInt(5, Integer.parseInt(lanchast.getText()));
-        ps.setInt(6, Integer.parseInt(salvavidast.getText()));
-        ps.setInt(7, Integer.parseInt(refrigeradorest.getText()));
-        ps.setInt(8, Integer.parseInt(brujulast.getText()));
-        ps.setInt(9, Integer.parseInt(indicadorest.getText()));
-        ps.setInt(10, Integer.parseInt(estufast.getText()));
-        ps.setInt(11, Integer.parseInt(radiost.getText()));
+        ps = con.prepareStatement("INSERT INTO equipo_propietarios(velas, anclas,cuerdas,lanchas,salvavidas,refrigeradores,brujulas,indicadores,estufas,radios) VALUES (?,?,?,?,?,?,?,?,?,?)");
+        //ps.setInt(1, Integer.parseInt(IDt.getText()));
+        ps.setInt(1, Integer.parseInt(velast.getText()));
+        ps.setInt(2, Integer.parseInt(anclast.getText()));
+        ps.setInt(3, Integer.parseInt(cuerdast.getText()));
+        ps.setInt(4, Integer.parseInt(lanchast.getText()));
+        ps.setInt(5, Integer.parseInt(salvavidast.getText()));
+        ps.setInt(6, Integer.parseInt(refrigeradorest.getText()));
+        ps.setInt(7, Integer.parseInt(brujulast.getText()));
+        ps.setInt(8, Integer.parseInt(indicadorest.getText()));
+        ps.setInt(9, Integer.parseInt(estufast.getText()));
+        ps.setInt(10, Integer.parseInt(radiost.getText()));
         if(ps.executeUpdate()>0){
             lista.setModel((mod));
             mod.removeAllElements();
-            mod.addElement("insercion exitosa");
+            mod.addElement("Insercion exitosa");
 
             IDt.setText("");
             velast.setText("");
