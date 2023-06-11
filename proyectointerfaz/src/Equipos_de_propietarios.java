@@ -27,6 +27,7 @@ public class Equipos_de_propietarios extends JFrame{
     private JButton quitarbt;
     private JTextField idt;
     private JLabel e;
+    private JButton modificarButton;
 
 
     public Equipos_de_propietarios() {
@@ -60,6 +61,52 @@ public class Equipos_de_propietarios extends JFrame{
                 }
             }
         });
+        modificarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    modificar();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+    }
+    public void modificar() throws SQLException {
+        conectar();
+        ps = con.prepareStatement("UPDATE equipo_propietarios SET velas = ?, anclas=?,cuerdas=?,lanchas=?,salvavidas=?," +
+                "refrigeradores=?,brujulas=?,indicadores=?,estufas=?,radios=? WHERE equipo_propid=?");
+        ps.setInt(1, Integer.parseInt(velast.getText()));
+        ps.setInt(2, Integer.parseInt(anclast.getText()));
+        ps.setInt(3, Integer.parseInt(cuerdast.getText()));
+        ps.setInt(4, Integer.parseInt(lanchast.getText()));
+        ps.setInt(5, Integer.parseInt(salvavidast.getText()));
+        ps.setInt(6, Integer.parseInt(refrigeradorest.getText()));
+        ps.setInt(7, Integer.parseInt(brujulast.getText()));
+        ps.setInt(8, Integer.parseInt(indicadorest.getText()));
+        ps.setInt(9, Integer.parseInt(estufast.getText()));
+        ps.setInt(10, Integer.parseInt(radiost.getText()));
+        ps.setInt(11, Integer.parseInt(idt.getText()));
+        System.out.println("entrooo");
+        if(ps.executeUpdate()>0){
+            lista.setModel((mod));
+            mod.removeAllElements();
+            mod.addElement("modificacion exitosa");
+
+            //IDt.setText("");
+            velast.setText("");
+            anclast.setText("");
+            cuerdast.setText("");
+            lanchast.setText("");
+            salvavidast.setText("");
+            refrigeradorest.setText("");
+            brujulast.setText("");
+            indicadorest.setText("");
+            estufast.setText("");
+            radiost.setText("");
+        }
+
+
     }
     public void eliminar() throws SQLException {
         conectar();
@@ -78,7 +125,8 @@ public class Equipos_de_propietarios extends JFrame{
         conectar();
         lista.setModel(mod);
         st = con.createStatement();
-        r = st.executeQuery("SELECT equipo_propid, velas, anclas, cuerdas, lanchas, salvavidas, refrigeradores, brujulas, indicadores, estufas, radios FROM equipo_propietarios");
+        r = st.executeQuery("SELECT equipo_propid, velas, anclas, cuerdas, lanchas, salvavidas, refrigeradores, brujulas," +
+                " indicadores, estufas, radios FROM equipo_propietarios");
         mod.removeAllElements();
         while(r.next()){
             mod.addElement(" id:"+r.getString(1)+"|"+" velas:"+r.getString(2)+"|"+" anclas:"+r.getString(3)+"|"+" cuerdas:"+r.getString(4)+"|"+" Lanchas:"+r.getString(5)+"|"+" Salvavidas:"+r.getString(6)+"|"+" Refrigeradores:"+r.getString(7)+"|"+" Brujulas:"+r.getString(8)+"|"+" Indicadores:"+r.getString(9)+"|"+" Estufas:"+r.getString(10)+"|"+" Radios:"+r.getString(11));
@@ -86,7 +134,8 @@ public class Equipos_de_propietarios extends JFrame{
     }
     public void  insertar() throws SQLException {
         conectar();
-        ps = con.prepareStatement("INSERT INTO equipo_propietarios(velas, anclas,cuerdas,lanchas,salvavidas,refrigeradores,brujulas,indicadores,estufas,radios) VALUES (?,?,?,?,?,?,?,?,?,?)");
+        ps = con.prepareStatement("INSERT INTO equipo_propietarios(velas, anclas,cuerdas,lanchas,salvavidas,refrigeradores," +
+                "brujulas,indicadores,estufas,radios) VALUES (?,?,?,?,?,?,?,?,?,?)");
         //ps.setInt(1, Integer.parseInt(IDt.getText()));
         ps.setInt(1, Integer.parseInt(velast.getText()));
         ps.setInt(2, Integer.parseInt(anclast.getText()));
